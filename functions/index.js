@@ -17,7 +17,8 @@ exports.getAstronauts = functions.region("europe-west1").https.onRequest((req, r
                         lastName: doc.data().lastName,
                         firstName: doc.data().firstName,
                         superpower: doc.data().superpower,
-                        dateOfBirth: doc.data().dateOfBirth
+                        dateOfBirth: doc.data().dateOfBirth,
+                        gender: doc.data().gender
                     });
                 });
                 return res.json(managedAstronauts);
@@ -35,7 +36,8 @@ exports.createAstronaut = functions.region("europe-west1").https.onRequest((req,
         lastName: req.body.lastName,
         firstName: req.body.firstName,
         superpower: req.body.superpower,
-        dateOfBirth: req.body.dateOfBirth
+        dateOfBirth: req.body.dateOfBirth,
+        gender: req.body.gender
     };
 
     admin.firestore()
