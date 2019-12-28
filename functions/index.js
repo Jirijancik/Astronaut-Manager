@@ -30,7 +30,9 @@ exports.getAstronauts = functions.region("europe-west1").https.onRequest((req, r
 exports.createAstronaut = functions.region("europe-west1").https.onRequest((req, res) => {
     if (req.method !== 'POST') {
         return res.status(400).json({ error: "Method not allowed!" });
-    }
+    };
+    
+
 
     const newAstronaut = {
         lastName: req.body.lastName,
@@ -40,14 +42,21 @@ exports.createAstronaut = functions.region("europe-west1").https.onRequest((req,
         gender: req.body.gender
     };
 
-    admin.firestore()
-        .collection('managedAstronauts')
-        .add(newAstronaut)
-        .then(doc => {
-            res.json({ message: `Astronaut ${newAstronaut.firstName} ${newAstronaut.lastName} was added!` });
-        })
-        .catch(err => {
-            res.status(500).json({ error: "Something Went Wrong =(" });
-            console.log(err);
-        })
-})
+    console.log(newAstronaut);
+    
+    if(!newAstronaut){
+        return res.status(500).json({ error: "False Data Recieved"});
+    }
+
+    return cors(req, res, () => {
+        admin.firestore()
+            .collection('managedAstronauts')
+            .add(newAstronaut)
+            .then(doc => {
+                res.json({ message: `Astronaut ${newAstronaut.firstName} ${newAstronaut.lastName} was added!` });
+            }).catch(err => {
+                res.status(500).json({ error: "Something Went Wrong =(" });
+                console.log(err);
+            });
+    });
+});
